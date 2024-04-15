@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Twitch-Sub Estimator</title>
+    <link rel="stylesheet" type="text/css" href="reset.css" />
+    <link rel="stylesheet" type="text/css" href="generic.css" />
+  </head>
+  <body>
+    <div id="top" class="page" role="document">
+      <main role="main">
+        <section id="forms">
+          <h1>Twitch-Einkommenschätzer</h1>
+          <form>
+            <fieldset id="forms__input">
+              <legend>Eckdaten</legend>
+              <p>
+                <label for="days">Anzahl Streams</label>
+                <input id="days" name="days" type="number" value="5" />
+              </p>
+              <p>
+                Intervall<br />
+                <label for="week"
+                  ><input
+                    id="week"
+                    name="interval"
+                    type="radio"
+                    value="week"
+                    checked
+                  />
+                  pro Woche</label
+                >
+
+                <label for="month"
+                  ><input
+                    id="month"
+                    name="interval"
+                    type="radio"
+                    class="radio"
+                    value="month"
+                  />
+                  pro Monat</label
+                >
+              </p>
+              <p>
+                <label for="subs">Subs pro Stream</label>
+                <input
+                  id="subs"
+                  name="subs"
+                  min="0"
+                  step="1"
+                  type="number"
+                  value="10"
+                />
+              </p>
+              <p>
+                <label for="taxbracket">Steuerklasse</label>
+                <input
+                  id="taxbracket"
+                  name="taxbracket"
+                  min="1"
+                  step="1"
+                  type="number"
+                  value="1"
+                  max="5"
+                />
+              </p>
+            </fieldset>
+
+            <fieldset id="forms__select">
+              <legend>Ominöse Details</legend>
+              <p>
+                Split (Creator - Twitch)<br />
+                <label for="fifty"
+                  ><input id="fifty" name="split" type="radio" value="50" /> 50
+                  - 50</label
+                >
+
+                <label for="sixty"
+                  ><input
+                    id="sixty"
+                    name="split"
+                    type="radio"
+                    value="60"
+                    class="radio"
+                  />
+                  60 - 40</label
+                >
+
+                <label for="seventy"
+                  ><input
+                    id="seventy"
+                    name="split"
+                    type="radio"
+                    value="70"
+                    class="radio"
+                  />
+                  70 - 30</label
+                >
+
+                <label for="auto"
+                  ><input
+                    id="auto"
+                    name="split"
+                    type="radio"
+                    value="auto"
+                    class="radio"
+                    checked
+                  />
+                  auto</label
+                >
+              </p>
+
+              <p>
+                <label for="plusratio"
+                  >Anteil für Partner-Plus relevante Subs in Prozent</label
+                >
+                <input
+                  id="plusratio"
+                  name="plusratio"
+                  type="number"
+                  value="10"
+                  min="0"
+                  max="100"
+                  step="1"
+                />
+              </p>
+              <p>
+                <label for="higher"
+                  >Anteile höhere Substufen in Prozent (wie viel Prozent der
+                  Subs sind nicht Stufe 1?)</label
+                >
+                <input
+                  id="higher"
+                  name="higher"
+                  type="number"
+                  value="10"
+                  min="0"
+                  max="100"
+                  step="1"
+                />
+              </p>
+              <p>
+                <label for="highest"
+                  >Anteil der Stufe 3-Subs an Subs höherer Stufen in Prozent
+                  (wie viel Prozent der höheren Subs sind Stufe 3?)</label
+                >
+                <input
+                  id="highest"
+                  name="highest"
+                  type="number"
+                  value="10"
+                  min="0"
+                  max="100"
+                  step="1"
+                />
+              </p>
+            </fieldset>
+
+            <details>
+              <summary>
+                Ein paar interne Settings, die vermutlich niemand jemals brauch.
+              </summary>
+              <fieldset id="forms__checkbox">
+                <legend>Internas</legend>
+                <p>
+                  <label for="price1">Der Preis für einen Stufe 1 Sub</label>
+                  <input
+                    id="price1"
+                    name="price1"
+                    min="0"
+                    type="number"
+                    value="3.99"
+                    max="100"
+                    step="0.01"
+                  />
+                </p>
+                <p>
+                  <label for="price2">Der Preis für einen Stufe 2 Sub</label>
+                  <input
+                    id="price2"
+                    name="price2"
+                    min="0"
+                    type="number"
+                    value="7.99"
+                    max="100"
+                    step="0.01"
+                  />
+                </p>
+                <p>
+                  <label for="price3">Der Preis für einen Stufe 3 Sub</label>
+                  <input
+                    id="price3"
+                    name="price3"
+                    min="0"
+                    type="number"
+                    value="19.99"
+                    max="100"
+                    step="0.01"
+                  />
+                </p>
+                <p>
+                  <label for="t1points"
+                    >Wie viele Subpunkte pro Stufe 1 Sub?</label
+                  >
+                  <input
+                    id="t1points"
+                    name="t1points"
+                    min="0"
+                    type="number"
+                    value="1"
+                    max="10"
+                    step="1"
+                  />
+                </p>
+                <p>
+                  <label for="t2points"
+                    >Wie viele Subpunkte pro Stufe 2 Sub?</label
+                  >
+                  <input
+                    id="t2points"
+                    name="t2points"
+                    min="0"
+                    type="number"
+                    value="2"
+                    max="10"
+                    step="1"
+                  />
+                </p>
+                <p>
+                  <label for="t3points"
+                    >Wie viele Subpunkte pro Stufe 3 Sub?</label
+                  >
+                  <input
+                    id="t3points"
+                    name="t3points"
+                    min="0"
+                    type="number"
+                    value="6"
+                    max="10"
+                    step="1"
+                  />
+                </p>
+                <p>
+                  <label for="vat"
+                    >Wie viel Prozent Mehrwertsteuer ist auf einem Sub?</label
+                  >
+                  <input
+                    id="vat"
+                    name="vat"
+                    min="0"
+                    type="number"
+                    value="19"
+                    max="100"
+                    step="1"
+                  />
+                </p>
+              </fieldset>
+            </details>
+          </form>
+        </section>
+        <section>
+          <header>
+            <h2>Ergebnisse</h2>
+            <p>
+              <em
+                >bitte bedenke: Payout in den Tabellen ist ohne (geschätzte)
+                Steuern.</em
+              >
+            </p>
+          </header>
+          <table>
+            <caption>
+              Monatlich
+            </caption>
+            <thead>
+              <tr>
+                <th>Substufe</th>
+                <th>Anzahl gesamt</th>
+                <th>Subpunkte gesamt</th>
+                <th>Anzahl Plus</th>
+                <th>Subpunkte Plus</th>
+                <th>Payout</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Summe</th>
+                <th id="monthlySumSubs">0</th>
+                <th id="monthlySumPoints">0</th>
+                <th id="monthlySumPlusSubs">0</th>
+                <th id="monthlySumPlusPoints">0</th>
+                <th id="monthlySumPayouts">0</th>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr>
+                <td>Stufe 1</td>
+                <td id="monthlyTier1AllSubs">0</td>
+                <td id="monthlyTier1AllPoints">0</td>
+                <td id="monthlyTier1PlusSubs">0</td>
+                <td id="monthlyTier1PlusPoints">0</td>
+                <td id="monthlyTier1Payout">0</td>
+              </tr>
+              <tr>
+                <td>Stufe 2</td>
+                <td id="monthlyTier2AllSubs">0</td>
+                <td id="monthlyTier2AllPoints">0</td>
+                <td id="monthlyTier2PlusSubs">0</td>
+                <td id="monthlyTier2PlusPoints">0</td>
+                <td id="monthlyTier2Payout">0</td>
+              </tr>
+              <tr>
+                <td>Stufe 3</td>
+                <td id="monthlyTier3AllSubs">0</td>
+                <td id="monthlyTier3AllPoints">0</td>
+                <td id="monthlyTier3PlusSubs">0</td>
+                <td id="monthlyTier3PlusPoints">0</td>
+                <td id="monthlyTier3Payout">0</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table>
+            <caption>
+              Jährlich
+            </caption>
+            <thead>
+              <tr>
+                <th>Substufe</th>
+                <th>Anzahl gesamt</th>
+                <th>Subpunkte gesamt</th>
+                <th>Anzahl Plus</th>
+                <th>Subpunkte Plus</th>
+                <th>Payout</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Summe</th>
+                <th id="yearlySumSubs">0</th>
+                <th id="yearlySumPoints">0</th>
+                <th id="yearlySumPlusSubs">0</th>
+                <th id="yearlySumPlusPoints">0</th>
+                <th id="yearlySumPayouts">0</th>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr>
+                <td>Stufe 1</td>
+                <td id="yearlyTier1AllSubs">0</td>
+                <td id="yearlyTier1AllPoints">0</td>
+                <td id="yearlyTier1PlusSubs">0</td>
+                <td id="yearlyTier1PlusPoints">0</td>
+                <td id="yearlyTier1Payout">0</td>
+              </tr>
+              <tr>
+                <td>Stufe 2</td>
+                <td id="yearlyTier2AllSubs">0</td>
+                <td id="yearlyTier2AllPoints">0</td>
+                <td id="yearlyTier2PlusSubs">0</td>
+                <td id="yearlyTier2PlusPoints">0</td>
+                <td id="yearlyTier2Payout">0</td>
+              </tr>
+              <tr>
+                <td>Stufe 3</td>
+                <td id="yearlyTier3AllSubs">0</td>
+                <td id="yearlyTier3AllPoints">0</td>
+                <td id="yearlyTier3PlusSubs">0</td>
+                <td id="yearlyTier3PlusPoints">0</td>
+                <td id="yearlyTier3Payout">0</td>
+              </tr>
+            </tbody>
+          </table>
+          <p id="sentence">Oh.</p>
+          <p>
+            Zum Vergleich: Das durchschnittliche Monats-Netto-Einkommen in
+            Deutschland liegt aktuell bei etwa 2750 €. <br />
+            Wer im Monat weniger als 1250 € Netto-Einkommen hat, gilt in
+            Deutschland als arm.<br />
+            Eine unverheiratete Person mit Bachelor-Abschluss und einigen Jahren
+            Berufserfahrung im öffentlichen Dienst kommt nach Tarif auf ein
+            Monatsnetto von etwa 3200 €.
+          </p>
+        </section>
+        <section>
+          <header>
+            <h2>Was passiert hier?</h2>
+          </header>
+          <p>
+            Xenia hat ein paar Mal zu oft im Leben
+            <em>back of the envelope</em> rumgerechnet, was auf Twitch so an
+            Income generiert wird. Not anymore.
+          </p>
+          <p>
+            Jetzt rechnet Xenia nicht mehr selbst. Stattdessen wurde das dem
+            Browser überlassen. Für die Schätzung der Einkommensteuer kommt ein
+            <a
+              href="https://www.bmf-steuerrechner.de/interface/einganginterface.xhtml"
+              rel="nofollow"
+              >Rechner des Bundesfinanzminiserium</a
+            >
+            zum Einsatz. Aus technischen Gründen werden die Daten durch
+            <a href="https://allorigins.win/">ein Proxy</a> abgefragt.
+          </p>
+          <p>
+            Alle auf dieser Seite eingegeben Daten verbleiben im Browser und
+            werden dort verarbeitet. Über das Proxy an den
+            Einkommenssteuerrechner versandt wird das geschätzte jährliche
+            Payout und die Steuerklasse.
+          </p>
+          <p>Für die Darstellung wird generic.css benutzt.</p>
+        </section>
+      </main>
+      <footer>
+        Ein <a href="https://elixirrlicht.dev">Elixirrlicht.Dev</a> Projekt.
+      </footer>
+    </div>
+    <script>
+      const formElem = document.querySelector("form");
+
+      addEventListener("DOMContentLoaded", (event) => {
+        fd = new FormData(formElem);
+        updateResults(fd);
+      });
+
+      formElem.addEventListener("change", (e) => {
+        fd = new FormData(formElem);
+        updateResults(fd);
+      });
+
+      formElem.addEventListener("submit", (e) => {
+        e.preventDefault();
+        fd = new FormData(formElem);
+        updateResults(fd);
+      });
+
+      async function updateResults(data) {
+        let streamsPerMonth;
+        let streamsPerYear;
+
+        let subsPerMonth;
+        let subsPerYear;
+
+        if (data.get("interval") == "week") {
+          streamsPerYear = Math.floor(
+            parseInt(data.get("days")) * (52 + 1 / 7)
+          );
+          subsPerYear = parseInt(data.get("subs")) * streamsPerYear;
+
+          streamsPerMonth = parseInt(data.get("days")) * 4;
+          subsPerMonth = parseInt(data.get("subs")) * streamsPerMonth;
+        } else {
+          streamsPerMonth = parseInt(data.get("days"));
+          subsPerMonth = parseInt(data.get("subs")) * streamsPerMonth;
+
+          streamsPerYear = streamsPerMonth * 12;
+          subsPerYear = subsPerMonth * 12;
+        }
+
+        // hier finden wir raus, sich die Subs auf Stufen verteilen
+        const higherPercent = parseInt(data.get("higher")) / 100;
+        const T3Ratio = higherPercent * (parseInt(data.get("highest")) / 100);
+
+        const T3perYear = Math.floor(subsPerYear * T3Ratio);
+        const T2perYear = Math.floor(subsPerYear * higherPercent) - T3perYear;
+        const T1perYear = subsPerYear - T3perYear - T2perYear;
+
+        const T3perMonth = Math.floor(subsPerMonth * T3Ratio);
+        const T2perMonth =
+          Math.floor(subsPerMonth * higherPercent) - T3perMonth;
+        const T1perMonth = subsPerMonth - T3perMonth - T2perMonth;
+
+        // und wie viele davon dann für Plus mitgerechnet werden
+
+        const plusPercentage = parseInt(data.get("plusratio")) / 100;
+
+        const T3PlusPerYear = Math.floor(plusPercentage * T3perYear);
+        const T2PlusPerYear = Math.floor(plusPercentage * T2perYear);
+        const T1PlusPerYear = Math.floor(plusPercentage * T1perYear);
+
+        const T3PlusPerMonth = Math.floor(plusPercentage * T3perMonth);
+        const T2PlusPerMonth = Math.floor(plusPercentage * T2perMonth);
+        const T1PlusPerMonth = Math.floor(plusPercentage * T1perMonth);
+
+        // und wie viele Sub-Punkte das jeweils für Plus und insgesamt sind
+
+        const T3Points = parseInt(data.get("t3points"));
+        const T2Points = parseInt(data.get("t2points"));
+        const T1Points = parseInt(data.get("t1points"));
+
+        const T3PointsPerYear = T3perYear * T3Points;
+        const T2PointsPerYear = T2perYear * T2Points;
+        const T1PointsPerYear = T1perYear * T1Points;
+
+        const T3PlusPointsPerYear = T3PlusPerYear * T3Points;
+        const T2PlusPointsPerYear = T2PlusPerYear * T2Points;
+        const T1PlusPointsPerYear = T1PlusPerYear * T1Points;
+
+        const T3PointsPerMonth = T3perMonth * T3Points;
+        const T2PointsPerMonth = T2perMonth * T2Points;
+        const T1PointsPerMonth = T1perMonth * T1Points;
+
+        const T3PlusPointsPerMonth = T3PlusPerMonth * T3Points;
+        const T2PlusPointsPerMonth = T2PlusPerMonth * T2Points;
+        const T1PlusPointsPerMonth = T1PlusPerMonth * T1Points;
+
+        // und wie viel Geld da je Substufe und Zeitintervall im PayOut ist
+        // für den Payout brauchen wir erstmal den Anteil für die streamende Person
+        const monthlyPlusPoints =
+          T3PlusPointsPerMonth + T2PlusPointsPerMonth + T1PlusPointsPerMonth;
+        const split = data.get("split");
+
+        let actualSplit;
+        if (split == "auto") {
+          if (monthlyPlusPoints >= 300) {
+            actualSplit = 70;
+          } else if (monthlyPlusPoints >= 100) {
+            actualSplit = 60;
+          } else {
+            actualSplit = 50;
+          }
+        } else {
+          actualSplit = parseInt(split);
+        }
+
+        // dann brauchen wir das von Twitch verteilte Geld (also Subkosten ohne Mehrwertsteuer)
+
+        const taxes = 100 + parseInt(data.get("vat"));
+
+        const t1paid = parseFloat(data.get("price1"));
+        const t2paid = parseFloat(data.get("price2"));
+        const t3paid = parseFloat(data.get("price3"));
+
+        const t1actual = (t1paid / taxes) * 100;
+        const t2actual = (t2paid / taxes) * 100;
+        const t3actual = (t3paid / taxes) * 100;
+
+        // und damit lässt sich das dann durchrechnen
+        const t1PayoutMonthly = t1actual * (actualSplit / 100) * T1perMonth;
+        const t2PayoutMonthly = t2actual * (actualSplit / 100) * T2perMonth;
+        const t3PayoutMonthly = t3actual * (actualSplit / 100) * T3perMonth;
+
+        const t1PayoutYearly = t1actual * (actualSplit / 100) * T1perYear;
+        const t2PayoutYearly = t2actual * (actualSplit / 100) * T2perYear;
+        const t3PayoutYearly = t3actual * (actualSplit / 100) * T3perYear;
+
+        // dann kommt noch alles in die Tabelle für Monate
+        document.getElementById("monthlyTier1AllSubs").innerText = T1perMonth;
+        document.getElementById("monthlyTier1AllPoints").innerText =
+          T1PointsPerMonth;
+        document.getElementById("monthlyTier1PlusSubs").innerText =
+          T1PlusPerMonth;
+        document.getElementById("monthlyTier1PlusPoints").innerText =
+          T1PlusPointsPerMonth;
+        document.getElementById("monthlyTier1Payout").innerText =
+          t1PayoutMonthly.toFixed(2);
+
+        document.getElementById("monthlyTier2AllSubs").innerText = T2perMonth;
+        document.getElementById("monthlyTier2AllPoints").innerText =
+          T2PointsPerMonth;
+        document.getElementById("monthlyTier2PlusSubs").innerText =
+          T2PlusPerMonth;
+        document.getElementById("monthlyTier2PlusPoints").innerText =
+          T2PlusPointsPerMonth;
+        document.getElementById("monthlyTier2Payout").innerText =
+          t2PayoutMonthly.toFixed(2);
+
+        document.getElementById("monthlyTier3AllSubs").innerText = T3perMonth;
+        document.getElementById("monthlyTier3AllPoints").innerText =
+          T3PointsPerMonth;
+        document.getElementById("monthlyTier3PlusSubs").innerText =
+          T3PlusPerMonth;
+        document.getElementById("monthlyTier3PlusPoints").innerText =
+          T3PlusPointsPerMonth;
+        document.getElementById("monthlyTier3Payout").innerText =
+          t3PayoutMonthly.toFixed(2);
+
+        document.getElementById("monthlySumSubs").innerText =
+          T1perMonth + T2perMonth + T3perMonth;
+        document.getElementById("monthlySumPoints").innerText =
+          T1PointsPerMonth + T2PointsPerMonth + T3PointsPerMonth;
+        document.getElementById("monthlySumPlusSubs").innerText =
+          T1PlusPerMonth + T2PlusPerMonth + T3PlusPerMonth;
+        document.getElementById("monthlySumPlusPoints").innerText =
+          T1PlusPointsPerMonth + T2PlusPointsPerMonth + T3PlusPointsPerMonth;
+        document.getElementById("monthlySumPayouts").innerText = (
+          t1PayoutMonthly +
+          t2PayoutMonthly +
+          t3PayoutMonthly
+        ).toFixed(2);
+
+        // ... und in die für Jahre
+        document.getElementById("yearlyTier1AllSubs").innerText = T1perYear;
+        document.getElementById("yearlyTier1AllPoints").innerText =
+          T1PointsPerYear;
+        document.getElementById("yearlyTier1PlusSubs").innerText =
+          T1PlusPerYear;
+        document.getElementById("yearlyTier1PlusPoints").innerText =
+          T1PlusPointsPerYear;
+        document.getElementById("yearlyTier1Payout").innerText =
+          t1PayoutYearly.toFixed(2);
+
+        document.getElementById("yearlyTier2AllSubs").innerText = T2perYear;
+        document.getElementById("yearlyTier2AllPoints").innerText =
+          T2PointsPerYear;
+        document.getElementById("yearlyTier2PlusSubs").innerText =
+          T2PlusPerYear;
+        document.getElementById("yearlyTier2PlusPoints").innerText =
+          T2PlusPointsPerYear;
+        document.getElementById("yearlyTier2Payout").innerText =
+          t2PayoutYearly.toFixed(2);
+
+        document.getElementById("yearlyTier3AllSubs").innerText = T3perYear;
+        document.getElementById("yearlyTier3AllPoints").innerText =
+          T3PointsPerYear;
+        document.getElementById("yearlyTier3PlusSubs").innerText =
+          T3PlusPerYear;
+        document.getElementById("yearlyTier3PlusPoints").innerText =
+          T3PlusPointsPerYear;
+        document.getElementById("yearlyTier3Payout").innerText =
+          t3PayoutYearly.toFixed(2);
+
+        document.getElementById("yearlySumSubs").innerText =
+          T1perYear + T2perYear + T3perYear;
+        document.getElementById("yearlySumPoints").innerText =
+          T1PointsPerYear + T2PointsPerYear + T3PointsPerYear;
+        document.getElementById("yearlySumPlusSubs").innerText =
+          T1PlusPerYear + T2PlusPerYear + T3PlusPerYear;
+        document.getElementById("yearlySumPlusPoints").innerText =
+          T1PlusPointsPerYear + T2PlusPointsPerYear + T3PlusPointsPerYear;
+        document.getElementById("yearlySumPayouts").innerText = (
+          t1PayoutYearly +
+          t2PayoutYearly +
+          t3PayoutYearly
+        ).toFixed(2);
+
+        // let's guess some taxes
+        const SumYearlyIncome = (
+          t1PayoutYearly +
+          t2PayoutYearly +
+          t3PayoutYearly
+        ).toFixed(2);
+        const estimatedTaxCent = await estimateIncomeTax(
+          SumYearlyIncome,
+          data.get("taxbracket")
+        );
+
+        const incomeTax = (estimatedTaxCent / 100).toFixed(2);
+
+        const incomeTaxPercent = ((100 * incomeTax) / SumYearlyIncome).toFixed(
+          2
+        );
+
+        const YearlyIncomeAfterTaxes = SumYearlyIncome - incomeTax;
+
+        const MonthyIncomeAfterTaxes = (YearlyIncomeAfterTaxes / 12).toFixed(2);
+
+        document.getElementById(
+          "sentence"
+        ).innerText = `Das sind grob geschätzt nach Steuern im Jahr etwa ${YearlyIncomeAfterTaxes} € (monatlich ${MonthyIncomeAfterTaxes} €), das entspricht etwa ${incomeTaxPercent} % oder ${incomeTax} €.`;
+      }
+
+      async function estimateIncomeTax(income, bracket) {
+        const incomecents = (income * 100).toFixed(0);
+        let stkl = parseInt(bracket);
+        if (isNaN(stkl)) {
+          stkl = 1;
+        }
+        const requestURL = `https://www.bmf-steuerrechner.de/interface/2024Version1.xhtml?code=2024ESSt&LZZ=1&RE4=${incomecents}&STKL=${stkl}`;
+
+        const proxiedURL =
+          "https://api.allorigins.win/get?url=" +
+          encodeURIComponent(requestURL);
+        const responseData = await fetch(proxiedURL, { cors: "cors" }).then(
+          (response) => response.json()
+        );
+
+        let parser = new DOMParser();
+        doc = parser.parseFromString(responseData["contents"], "text/xml");
+
+        let taxes =
+          parseInt(
+            doc
+              .querySelector(
+                "lohnsteuer:nth-child(1) > ausgaben:nth-child(3) > ausgabe:nth-child(4)"
+              )
+              .getAttribute("value")
+          ) +
+          parseInt(
+            doc
+              .querySelector(
+                "lohnsteuer:nth-child(1) > ausgaben:nth-child(3) > ausgabe:nth-child(5)"
+              )
+              .getAttribute("value")
+          );
+        return taxes;
+      }
+    </script>
+  </body>
+</html>
